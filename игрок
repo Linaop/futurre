@@ -1,0 +1,53 @@
+import pygame
+import sys
+
+# Инициализация Pygame
+pygame.init()
+
+# Установка размеров окна
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Пример прыжка")
+
+# Цвета
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Параметры персонажа
+player_width = 50
+player_height = 50
+player_x = screen_width // 2 - player_width // 2
+player_y = screen_height - player_height
+player_y_speed = 0
+jumping = False
+
+# Основной игровой цикл
+while True:
+    screen.fill(WHITE)
+
+    # Обработка событий
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not jumping:
+                jumping = True
+                player_y_speed = -10  # Начальная скорость прыжка
+
+    # Процесс прыжка
+    if jumping:
+        player_y += player_y_speed
+        player_y_speed += 0.5  # Гравитация
+
+        # Проверка на достижение земли
+        if player_y >= screen_height - player_height:
+            player_y = screen_height - player_height
+            jumping = False
+
+    # Отрисовка персонажа
+    pygame.draw.rect(screen, BLACK, (player_x, player_y, player_width, player_height))
+
+    # Обновление экрана
+    pygame.display.update()
